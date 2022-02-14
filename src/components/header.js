@@ -30,7 +30,6 @@ export default function Header() {
                   <svg
                     className='w-8 mr-6 text-black-light cursor-pointer'
                     xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -56,7 +55,6 @@ export default function Header() {
                   <svg
                     className='w-8 mr-6 text-black-light cursor-pointer'
                     xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -69,18 +67,37 @@ export default function Header() {
                     />
                   </svg>
                 </button>
-                <div className='flex items-center cursoor-pointer'>
+                <div className='flex items-center cursor-pointer'>
                   <Link to={`/p/${user.displayName}`}>
                     <img
                       className='rounded-full h-8 w-8'
-                      src={`/images/avatars/${user.displayName || 'default'}.jpg`}
+                      src={`/images/avatars/${
+                        user.displayName || 'default'
+                      }.jpg`}
                       alt={`${user.displayName} profile`}
                     />
                   </Link>
                 </div>
               </>
             ) : (
-              <></>
+              <>
+                <Link to={ROUTES.LOGIN}>
+                  <button
+                    className='bg-blue-medium font-bold text-sm rounded text-white w-20 h-8'
+                    type='button'
+                  >
+                    Log In
+                  </button>
+                </Link>
+                <Link to={ROUTES.SIGNUP}>
+                  <button
+                    className='text-blue-medium font-bold text-sm rounded w-20 h-8'
+                    type='button'
+                  >
+                    Sign Up
+                  </button>
+                </Link>
+              </>
             )}
           </div>
         </div>
