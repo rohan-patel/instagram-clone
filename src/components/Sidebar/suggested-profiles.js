@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {updateLoggedInUserFollowing, updatefollowedUserFollowers} from '../../services/firebase'
+import {
+  updateLoggedInUserFollowing,
+  updatefollowedUserFollowers,
+} from '../../services/firebase'
+import { ReactComponent as LoadingSvg } from '../../svg/loading2.svg'
+
+// rgba(38, 38, 38, 0.5335483870967741)  loading animation fill color
 
 // TODO: add the loading Animation while updating firestore for follow
 
@@ -13,12 +19,17 @@ export default function SuggestedProfile({
   loggedInUserDocId,
 }) {
   const [followed, setFollowed] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   async function handleFollowUser() {
+    setIsUpdating(true)
+
     await updateLoggedInUserFollowing(loggedInUserDocId, profileId, followed)
-    
+
     await updatefollowedUserFollowers(profileDocId, userId, followed)
-    
+
+    setIsUpdating(false)
+
     setFollowed(!followed)
   }
 
@@ -41,7 +52,13 @@ export default function SuggestedProfile({
         type='button'
         onClick={handleFollowUser}
       >
-        {followed ? 'Following' : 'Follow'}
+        {isUpdating ? (
+          <LoadingSvg fill='rgba(38, 38, 38, 0.5335483870967741)' />
+        ) : followed ? (
+          'Following'
+        ) : (
+          'Follow'
+        )}
       </button>
     </div>
   )
@@ -52,5 +69,5 @@ SuggestedProfile.propTypes = {
   username: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
-  loggedInUserDocId: PropTypes.string.isRequired
+  loggedInUserDocId: PropTypes.string.isRequired,
 }

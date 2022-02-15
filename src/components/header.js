@@ -9,7 +9,7 @@ export default function Header() {
   const { user } = useContext(UserContext)
 
   return (
-    <header className='h-16 bg-white border-b border-gray-primary mb-8'>
+    <nav className='h-16 bg-white border-b border-gray-primary mb-8 fixed top-0 left-0 right-0 z-20'>
       <div className='container mx-auto max-w-screen-lg h-full'>
         <div className='flex justify-between h-full'>
           <div className='text-gray-700 text-center flex items-center justify-center cursor-pointer'>
@@ -102,6 +102,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </nav>
   )
 }

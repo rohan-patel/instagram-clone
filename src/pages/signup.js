@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import * as ROUTES from '../constants/routes'
 import { doesUsernameExists } from '../services/firebase'
-
+import { ReactComponent as LoadingSvg } from '../svg/loading2.svg'
 
 export default function SignUp() {
   const history = useNavigate()
@@ -15,6 +15,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
 
   const [error, setError] = useState('')
+  const [isSigningUp, setIsSigningUp] = useState(false)
   const isInValid =
     password === '' || emailAddress === '' || username === '' || fullName === ''
 
@@ -25,24 +26,28 @@ export default function SignUp() {
     console.log(usernameExists)
     if (!usernameExists.length) {
       try {
+        setIsSigningUp(true)
+
         const createdUserResult = await firebase
           .auth()
           .createUserWithEmailAndPassword(emailAddress, password)
 
-          await createdUserResult.user.updateProfile({
-            displayName: username
-          })
+        await createdUserResult.user.updateProfile({
+          displayName: username,
+        })
 
-          await firebase.firestore().collection('users').add({
-            userId: createdUserResult.user.uid,
-            username: username.toLowerCase(),
-            fullName,
-            emailAddress: emailAddress.toLowerCase(),
-            following: [],
-            dateCreated: Date.now()
-          })
+        await firebase.firestore().collection('users').add({
+          userId: createdUserResult.user.uid,
+          username: username.toLowerCase(),
+          fullName,
+          emailAddress: emailAddress.toLowerCase(),
+          following: [],
+          dateCreated: Date.now(),
+        })
 
-          history(ROUTES.DASHBOARD)
+        setIsSigningUp(false)
+
+        history(ROUTES.DASHBOARD)
       } catch (error) {
         setFullName('')
         setUsername('')
@@ -121,7 +126,7 @@ export default function SignUp() {
                 isInValid && 'opacity-50'
               }`}
             >
-              Sign Up
+              {isSigningUp ? <LoadingSvg fill='white' /> : 'Sign Up'}
             </button>
           </form>
         </div>

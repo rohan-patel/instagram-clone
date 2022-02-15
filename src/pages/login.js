@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import * as ROUTES from './../constants/routes'
+import { ReactComponent as LoadingSvg } from '../svg/loading2.svg'
 
 export default function Login() {
   const history = useNavigate()
@@ -11,13 +12,18 @@ export default function Login() {
   const [password, setPassword] = useState('')
 
   const [error, setError] = useState('')
+  const [isLogginIn, setIsLogginIn] = useState(false)
   const isInValid = password === '' || emailAddress === ''
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
+      setIsLogginIn(true)
+
       await firebase.auth().signInWithEmailAndPassword(emailAddress, password)
       history(ROUTES.DASHBOARD)
+
+      setIsLogginIn(false)
     } catch (error) {
       setEmailAddress('')
       setPassword('')
@@ -71,18 +77,18 @@ export default function Login() {
             <button
               disabled={isInValid}
               type='submit'
-              className={`bg-blue-medium text-white w-full rounded h-8 font-bold ${
+              className={`bg-blue-dark text-white w-full rounded h-8 font-bold ${
                 isInValid && 'opacity-50'
               }`}
             >
-              Log In
+              {isLogginIn ? <LoadingSvg fill='white' /> : 'Log In'}
             </button>
           </form>
         </div>
         <div className='flex justify-center items-center flex-col w-full bg-white p-4 border border-gray-primary rounded'>
           <p className='text-sm'>
             Don't have an account?{` `}
-            <Link to={ROUTES.SIGNUP} className='font-bold text-blue-medium'>
+            <Link to={ROUTES.SIGNUP} className='font-bold text-blue-signup'>
               Sign Up
             </Link>
           </p>
