@@ -3,10 +3,20 @@ import { Link } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import UserContext from '../context/user'
 import * as ROUTES from '../constants/routes'
+import { getStorage, ref, getDownloadURL } from 'firebase/storage'
+import * as LINKS from '../constants/links'
 
 export default function Header() {
   const { firebase } = useContext(FirebaseContext)
   const { user } = useContext(UserContext)
+
+  const storage = getStorage()
+  getDownloadURL(
+    ref(storage, `/Profile Pictures/${user.displayName}.jpg`)
+  ).then((url) => {
+    const img = document.getElementById('header-user-profile-pic')
+    img.setAttribute('src', url)
+  })
 
   return (
     <nav className='h-16 bg-white border-b border-gray-primary mb-8 fixed top-0 left-0 right-0 z-20'>
@@ -71,10 +81,9 @@ export default function Header() {
                   <Link to={`/p/${user.displayName}`}>
                     <img
                       className='rounded-full h-8 w-8'
-                      src={`/images/avatars/${
-                        user.displayName || 'default'
-                      }.jpg`}
-                      alt={`${user.displayName} profile`}
+                      id='header-user-profile-pic'
+                      src={LINKS.DEFAULT_PROFILE_PIC_URL}
+                      alt=''
                     />
                   </Link>
                 </div>

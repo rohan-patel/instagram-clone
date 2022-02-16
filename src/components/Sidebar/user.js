@@ -3,8 +3,18 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { getStorage, ref, getDownloadURL } from 'firebase/storage'
 
 export default function User({ username, fullName }) {
+  
+  const storage = getStorage()
+  getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(
+    (url) => {
+      const img = document.getElementById('sidebar-user-profile-pic')
+      img.setAttribute('src', url)
+    }
+  )
+
   return !username || !fullName ? (
     <Skeleton count={1} height={61} />
   ) : (
@@ -15,6 +25,7 @@ export default function User({ username, fullName }) {
       <div className='flex items-center justify-between col-span-1'>
         <img
           className='rounded-full w-14 h-14'
+          id='sidebar-user-profile-pic'
           src={`/images/avatars/${username}.jpg`}
           alt=''
         />

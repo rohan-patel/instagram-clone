@@ -1,0 +1,2 @@
+export const DEFAULT_PROFILE_PIC_URL =
+  'https://firebasestorage.googleapis.com/v0/b/instagram-clone-a8e53.appspot.com/o/Profile%20Pictures%2Fdefault.jpg?alt=media&token=70cb3f12-7d68-4422-89df-3db1c1a6dec9'
