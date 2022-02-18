@@ -8,11 +8,14 @@ export default function Sidebar() {
   } = useUser()
 
   return (
-    <div className='p-4'>
+    <div className='p-4 pl-8 fixed' style={{right: '240px', width:'350.86px'}}>
       <User username={username} fullName={fullName} />
-      <Suggestion userId={userId} following={following} loggedInUserDocId={docId} />
+      <Suggestion
+        userId={userId}
+        following={following}
+        loggedInUserDocId={docId}
+      />
     </div>
   )
 }
 
-Sidebar.whyDidYouRender = true

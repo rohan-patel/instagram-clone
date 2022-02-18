@@ -1,4 +1,5 @@
 import { firebase, FieldValue, storage } from './../lib/firebase'
+import { getDocs } from 'firebase/firestore'
 
 export async function doesUsernameExists(username) {
   const result = await firebase
@@ -85,6 +86,8 @@ export async function getPhotos(userId, following) {
     docId: photo.id,
   }))
 
+  // console.log('ufp', userFollowedPhotos);
+
   const photosWithUserDetails = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
       let userLikedPhoto = false
@@ -99,4 +102,24 @@ export async function getPhotos(userId, following) {
   )
 
   return photosWithUserDetails
+}
+
+export async function getComment(photoId, index, userId) {
+  const result = firebase
+    .firestore()
+    .collection('photos')
+    .where('photoId', '==', photoId)
+
+  const querySnapshot = await getDocs(result)
+  let likedCommentArr = []
+  querySnapshot.forEach((doc) => {
+    const comments = doc.data().comments
+    const likedComment = comments[index]
+
+    let usersLikedComment = likedComment.likes
+    let userLikedComment = usersLikedComment.includes(userId)
+    
+    likedCommentArr.push(userLikedComment)
+  })
+  return likedCommentArr
 }

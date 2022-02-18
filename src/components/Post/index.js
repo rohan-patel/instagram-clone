@@ -27,6 +27,7 @@ export default function Post({ content }) {
         comments={content.comments}
         posted={content.dateCreated}
         commentInput={commentInput}
+        photoId={content.photoId}
       />
     </div>
   )

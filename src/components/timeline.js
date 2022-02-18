@@ -5,7 +5,7 @@ import Post from './Post'
 export default function Timeline() {
   const { photos } = usePhotos()
 
-  console.log(photos)
+  // console.log(photos)
 
   return (
     <div className='container col-span-2'>
@@ -15,7 +15,7 @@ export default function Timeline() {
         </>
       ) : photos?.length > 0 ? (
         photos.map((content) => {
-          console.log(content)
+          // console.log(content)
           return <Post key={content.docId} content={content} />
         })
       ) : (

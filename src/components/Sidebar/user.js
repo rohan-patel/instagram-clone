@@ -4,16 +4,18 @@ import { Link } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { getStorage, ref, getDownloadURL } from 'firebase/storage'
+import * as LINKS from '../../constants/links'
 
 export default function User({ username, fullName }) {
-  
   const storage = getStorage()
-  getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(
-    (url) => {
-      const img = document.getElementById('sidebar-user-profile-pic')
-      img.setAttribute('src', url)
-    }
-  )
+  getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(OnResolve, OnReject)
+
+  function OnResolve(url) {
+    const img = document.getElementById('sidebar-user-profile-pic')
+    img.setAttribute('src', url)
+  }
+
+  function OnReject(error) {}
 
   return !username || !fullName ? (
     <Skeleton count={1} height={61} />
@@ -26,7 +28,7 @@ export default function User({ username, fullName }) {
         <img
           className='rounded-full w-14 h-14'
           id='sidebar-user-profile-pic'
-          src={`/images/avatars/${username}.jpg`}
+          src={LINKS.DEFAULT_PROFILE_PIC_URL}
           alt=''
         />
       </div>

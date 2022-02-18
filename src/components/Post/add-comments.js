@@ -10,6 +10,7 @@ export default function AddComment({
   commentInput,
 }) {
   const [comment, setComment] = useState('')
+  const [commentLikes, setCommentLikes] = useState([])
   const { firebase, FieldValue } = useContext(FirebaseContext)
   const {
     user: { displayName },
@@ -18,14 +19,14 @@ export default function AddComment({
   const handleSubmitComment = (e) => {
     e.preventDefault()
 
-    setComments([{ displayName, comment }, ...comments])
+    setComments([{ displayName, comment, commentLikes }, ...comments])
     setComment('')
 
     return firebase
       .firestore()
       .collection('photos')
       .doc(docId)
-      .update({ comments: FieldValue.arrayUnion({ displayName, comment }) })
+      .update({ comments: FieldValue.arrayUnion({ displayName, comment, commentLikes }) })
   }
   return (
     <div className='border-t border-gray-primary'>

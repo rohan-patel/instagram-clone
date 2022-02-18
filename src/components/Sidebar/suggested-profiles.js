@@ -10,7 +10,6 @@ import {
 import { ReactComponent as LoadingSvg } from '../../svg/loading2.svg'
 import * as LINKS from '../../constants/links'
 
-
 export default function SuggestedProfile({
   profileDocId,
   username,
@@ -22,12 +21,17 @@ export default function SuggestedProfile({
   const [isUpdating, setIsUpdating] = useState(false)
 
   const storage = getStorage()
-  getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(
-    (url) => {
-      const img = document.getElementById('profile-picture' + `${username}`)
-      img.setAttribute('src', url)
-    }
-  )
+
+  getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(OnResolve, OnReject)
+
+  function OnResolve(url) {
+    const img = document.getElementById('profile-picture' + `${username}`)
+    img.setAttribute('src', url)
+  }
+
+  function OnReject(error) {
+
+  }
 
   async function handleFollowUser() {
     setIsUpdating(true)

@@ -6,7 +6,7 @@ import * as LINKS from '../../constants/links'
 export default function Header({username, docId}) {
 
   const storage = getStorage()
-  console.log(docId);
+  // console.log(docId);
   getDownloadURL(ref(storage, `/Profile Pictures/${username}.jpg`)).then(
     (url) => {
       const img = document.getElementById('post-profile-pic' + `${username}` + `${docId}`)
