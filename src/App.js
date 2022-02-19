@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import * as ROUTES from './constants/routes'
 import UserContext from './context/user'
 import useAuthListener from './hooks/use-auth-listener'
+import ProtectedRoute from './helpers/protected-routes'
 
 const Login = lazy(() => import('./pages/login'))
 const SignUp = lazy(() => import('./pages/signup'))
@@ -19,7 +20,15 @@ export default function App() {
           <Routes>
             <Route path={ROUTES.LOGIN} element={<Login />} />
             <Route path={ROUTES.SIGNUP} element={<SignUp />} />
-            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+
+            <Route
+              path={ROUTES.DASHBOARD}
+              element={
+                <ProtectedRoute user={user} redirectTo={ROUTES.LOGIN}>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Suspense>
