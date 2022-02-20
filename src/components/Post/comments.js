@@ -58,6 +58,7 @@ export default function Comments({
         comments={comments}
         setComments={setComments}
         commentInput={commentInput}
+        photoId={photoId}
       />
     </>
   )

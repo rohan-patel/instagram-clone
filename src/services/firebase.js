@@ -8,9 +8,21 @@ export async function doesUsernameExists(username) {
     .where('username', '==', username)
     .get()
 
-  console.log(result)
-
   return result.docs.map((user) => user.data().length > 0)
+}
+
+export async function getUserByUsername(username) {
+  const result = await firebase
+    .firestore()
+    .collection('users')
+    .where('username', '==', username)
+    .get()
+
+  return result.docs.map((item) => ({
+    ...item.data(),
+    docId: item.id
+  }))
+  
 }
 
 export async function getUserByUserId(userId) {
@@ -122,4 +134,19 @@ export async function getComment(photoId, index, userId) {
     likedCommentArr.push(userLikedComment)
   })
   return likedCommentArr
+}
+
+export async function getCommentsLength(photoId) {
+  const result = firebase
+    .firestore()
+    .collection('photos')
+    .where('photoId', '==', photoId)
+
+  let commentsLength = 0
+  const querySnapshot = await getDocs(result)
+  querySnapshot.forEach((doc) => {
+    const comments = doc.data().comments
+    commentsLength = comments.length
+  })
+  return commentsLength
 }

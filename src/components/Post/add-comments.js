@@ -2,31 +2,43 @@ import { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import FirebaseContext from '../../context/firebase'
 import UserContext from '../../context/user'
+import { getCommentsLength } from '../../services/firebase'
 
 export default function AddComment({
   docId,
   comments,
   setComments,
   commentInput,
+  photoId,
 }) {
   const [comment, setComment] = useState('')
-  const [commentLikes, setCommentLikes] = useState([])
+  const [commentLength, setCommentLength] = useState('')
+  getCommentsLength(photoId).then((value) => setCommentLength(value))
+  const [likes, setLikes] = useState([])
   const { firebase, FieldValue } = useContext(FirebaseContext)
   const {
     user: { displayName },
   } = useContext(UserContext)
+  let commentId = commentLength.toString()
 
   const handleSubmitComment = (e) => {
     e.preventDefault()
 
-    setComments([{ displayName, comment, commentLikes }, ...comments])
+    setComments([{ displayName, comment, likes, commentId }, ...comments])
     setComment('')
 
     return firebase
       .firestore()
       .collection('photos')
       .doc(docId)
-      .update({ comments: FieldValue.arrayUnion({ displayName, comment, commentLikes }) })
+      .update({
+        comments: FieldValue.arrayUnion({
+          displayName,
+          comment,
+          likes,
+          commentId,
+        }),
+      })
   }
   return (
     <div className='border-t border-gray-primary'>
