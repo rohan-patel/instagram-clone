@@ -42,6 +42,7 @@ export default function SignUp() {
           fullName,
           emailAddress: emailAddress.toLowerCase(),
           following: [],
+          followers: [],
           dateCreated: Date.now(),
         })
 
@@ -56,7 +57,7 @@ export default function SignUp() {
         setError(error.message)
       }
     } else {
-      setError('The USername already exists. PLaese try another.')
+      setError('The Username already exists. PLaese try another.')
     }
   }
 

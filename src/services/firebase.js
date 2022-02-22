@@ -116,6 +116,47 @@ export async function getPhotos(userId, following) {
   return photosWithUserDetails
 }
 
+// export async function getUserIdByUsername(username) {
+//   const result = firebase
+//     .firestore()
+//     .collection('users')
+// }
+
+export async function getUserPhotosByUserId(userId) {
+  const result = await firebase
+    .firestore()
+    .collection('photos')
+    .where('userId', '==', userId)
+    .get()
+
+    return result.docs.map((photo) => ({
+      ...photo.data(),
+      docId: photo.id
+    }))
+}
+
+export async function isUserFollowingProfile(loggedInUserUsername, profileUserId) {
+  console.log('profileUserId', profileUserId);
+  console.log('loggedInUserUsername', loggedInUserUsername)
+  const result = firebase
+    .firestore()
+    .collection('users')
+    .where('username', '==', loggedInUserUsername)
+    // .where('following', 'array-contains', 'profileUserId')
+    
+    // console.log('result', result);
+
+    const querySnapshot = await getDocs(result)
+    // console.log('querySnapshot', querySnapshot)
+    let isUserFollowing = false
+    querySnapshot.forEach((item) => {
+      // console.log('item', item);
+      const following = item.data().following
+      isUserFollowing = following.includes(profileUserId)
+    })
+    return isUserFollowing
+}
+
 export async function getComment(photoId, index, userId) {
   const result = firebase
     .firestore()
