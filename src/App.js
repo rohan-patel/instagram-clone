@@ -38,7 +38,11 @@ export default function App() {
               }
             />
 
-            <Route path={ROUTES.PROFILE} element={<Profile />} />
+            <Route path={ROUTES.PROFILE} element={
+              <ProtectedRoute user={user} redirectTo={ROUTES.LOGIN}>
+                <Profile />
+              </ProtectedRoute>
+            } />
 
             <Route
               path={ROUTES.DASHBOARD}

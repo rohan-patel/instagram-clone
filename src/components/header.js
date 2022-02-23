@@ -1,14 +1,22 @@
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import UserContext from '../context/user'
 import * as ROUTES from '../constants/routes'
 import { getStorage, ref, getDownloadURL } from 'firebase/storage'
 import * as LINKS from '../constants/links'
+import { ReactComponent as HomeLogo } from '../svg/hut.svg'
 
 export default function Header() {
   const { firebase } = useContext(FirebaseContext)
   const { user } = useContext(UserContext)
+  let location = useLocation()
+  let homeFill = 'none'
+  if (location.pathname === '/') {
+    homeFill = 'currentColor'
+  }
+
+  // console.log('location', location.pathname);
 
   const storage = getStorage()
   getDownloadURL(
@@ -38,17 +46,20 @@ export default function Header() {
               <>
                 <Link to={ROUTES.DASHBOARD} aria-label='Dashboard'>
                   <svg
-                    className='w-8 mr-6 text-black-light cursor-pointer'
+                    className='w-6 mr-6 text-black-light cursor-pointer'
+                    id='Layer_1'
+                    data-name='Layer 1'
                     xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
+                    viewBox='0 0 10.8 10.88'
+                    fill={homeFill}
                     stroke='currentColor'
                   >
                     <path
                       strokeLinecap='round'
                       strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+                      strokeWidth='1'
+                      d='M6.61,10.69l0,2.34H3V6.73L8,3l5,3.61V13H9.53V10.69C9.59,8.83,6.67,8.76,6.61,10.69Z'
+                      transform='translate(-2.6 -2.56)'
                     />
                   </svg>
                 </Link>
@@ -72,7 +83,7 @@ export default function Header() {
                     <path
                       strokeLinecap='round'
                       strokeLinejoin='round'
-                      strokeWidth={2}
+                      strokeWidth={1.65}
                       d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
                     />
                   </svg>

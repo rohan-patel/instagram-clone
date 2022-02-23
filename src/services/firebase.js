@@ -20,9 +20,8 @@ export async function getUserByUsername(username) {
 
   return result.docs.map((item) => ({
     ...item.data(),
-    docId: item.id
+    docId: item.id,
   }))
-  
 }
 
 export async function getUserByUserId(userId) {
@@ -129,32 +128,46 @@ export async function getUserPhotosByUserId(userId) {
     .where('userId', '==', userId)
     .get()
 
-    return result.docs.map((photo) => ({
-      ...photo.data(),
-      docId: photo.id
-    }))
+  return result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }))
 }
 
-export async function isUserFollowingProfile(loggedInUserUsername, profileUserId) {
-  console.log('profileUserId', profileUserId);
+export async function isUserFollowingProfile(
+  loggedInUserUsername,
+  profileUserId
+) {
+  console.log('profileUserId', profileUserId)
   console.log('loggedInUserUsername', loggedInUserUsername)
   const result = firebase
     .firestore()
     .collection('users')
     .where('username', '==', loggedInUserUsername)
-    // .where('following', 'array-contains', 'profileUserId')
-    
-    // console.log('result', result);
+  // .where('following', 'array-contains', 'profileUserId')
 
-    const querySnapshot = await getDocs(result)
-    // console.log('querySnapshot', querySnapshot)
-    let isUserFollowing = false
-    querySnapshot.forEach((item) => {
-      // console.log('item', item);
-      const following = item.data().following
-      isUserFollowing = following.includes(profileUserId)
-    })
-    return isUserFollowing
+  // console.log('result', result);
+
+  const querySnapshot = await getDocs(result)
+  // console.log('querySnapshot', querySnapshot)
+  let isUserFollowing = false
+  querySnapshot.forEach((item) => {
+    // console.log('item', item);
+    const following = item.data().following
+    isUserFollowing = following.includes(profileUserId)
+  })
+  return isUserFollowing
+}
+
+export async function toggleFollow(
+  isFollowingProfile,
+  activeUserDocId,
+  profileDocId,
+  profileUserId,
+  followingUserId
+) {
+  await updateLoggedInUserFollowing(activeUserDocId, profileUserId, isFollowingProfile)
+  await updatefollowedUserFollowers(profileDocId, followingUserId, isFollowingProfile)
 }
 
 export async function getComment(photoId, index, userId) {
@@ -171,7 +184,7 @@ export async function getComment(photoId, index, userId) {
 
     let usersLikedComment = likedComment.likes
     let userLikedComment = usersLikedComment.includes(userId)
-    
+
     likedCommentArr.push(userLikedComment)
   })
   return likedCommentArr
