@@ -16,11 +16,13 @@ module.exports = {
       black: {
         light: '#262626',
         faded: '#00000059',
+        bg: '#00000070',
       },
       gray: {
         base: '#616161',
         background: '#fafafa',
         primary: '#dbdbdb',
+        border: '#f5f5f5',
       },
       red: {
         primary: '#ed4956',
