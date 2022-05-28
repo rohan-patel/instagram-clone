@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FirebaseContext from '../context/firebase'
 import UserContext from '../context/user'
@@ -7,7 +7,7 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage'
 import * as LINKS from '../constants/links'
 import { ReactComponent as HomeLogo } from '../svg/hut.svg'
 
-export default function Header() {
+export default function Header({ hasProfileImageChanged, setHasProfileImageChanged }) {
   const { firebase } = useContext(FirebaseContext)
   const { user } = useContext(UserContext)
   let location = useLocation()
@@ -17,14 +17,32 @@ export default function Header() {
   }
 
   // console.log('location', location.pathname);
-
   const storage = getStorage()
-  getDownloadURL(
-    ref(storage, `/Profile Pictures/${user.displayName}.jpg`)
-  ).then((url) => {
+
+  useEffect(() => {
     const img = document.getElementById('header-user-profile-pic')
-    img.setAttribute('src', url)
-  })
+
+    if (user.displayName) {
+      getDownloadURL(ref(storage, `/Profile Pictures/${user.displayName}.jpg`))
+        .then((url) => {
+          console.log(url)
+          img.setAttribute('src', url)
+        })
+        .catch((error) => {
+          if (error.code === 'storage/object-not-found') {
+            img.setAttribute('src', LINKS.DEFAULT_PROFILE_PIC_URL)
+          }
+        })
+    }
+  }, [hasProfileImageChanged])
+
+  
+  // getDownloadURL(
+  //   ref(storage, `/Profile Pictures/${user.displayName}.jpg`)
+  // ).then((url) => {
+  //   const img = document.getElementById('header-user-profile-pic')
+  //   img.setAttribute('src', url)
+  // })
 
   return (
     <nav className='h-16 bg-white border-b border-gray-primary mb-8 fixed top-0 left-0 right-0 z-1'>

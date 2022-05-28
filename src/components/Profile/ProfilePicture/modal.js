@@ -11,7 +11,11 @@ import {
 import UserContext from '../../../context/user'
 import { useEffect } from 'react'
 
-export const Modal = ({ setShowModal }) => {
+export const Modal = ({
+  setShowModal,
+  setHasProfileImageChanged,
+  hasProfileImageChanged,
+}) => {
   const { user } = useContext(UserContext)
   const storage = getStorage()
   const [fileUploaded, setFileUploaded] = useState(null)
@@ -57,17 +61,21 @@ export const Modal = ({ setShowModal }) => {
           setShowModal(false)
         }
       )
+      setHasProfileImageChanged(!hasProfileImageChanged)
     }
   }
 
   const removePicture = () => {
     const storage = getStorage()
     const desertRef = ref(storage, `Profile Pictures/${user.displayName}.jpg`)
-    console.log(desertRef);
-    deleteObject(desertRef).then(() => {
-      console.log('Success');
-      setShowModal(false)
-    }).catch((error) => console.log(error))
+    console.log(desertRef)
+    deleteObject(desertRef)
+      .then(() => {
+        console.log('Success')
+        setShowModal(false)
+      })
+      .catch((error) => console.log(error))
+    setHasProfileImageChanged(!hasProfileImageChanged)
   }
 
   return ReactDom.createPortal(

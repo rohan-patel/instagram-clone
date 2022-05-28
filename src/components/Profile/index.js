@@ -4,7 +4,11 @@ import Header from './header'
 import { getUserPhotosByUserId } from '../../services/firebase'
 import Photos from './photos'
 
-export default function UserProfile({ user }) {
+export default function UserProfile({
+  user,
+  hasProfileImageChanged,
+  setHasProfileImageChanged,
+}) {
   const reducer = (state, newState) => ({ ...state, ...newState })
   const initialState = {
     profile: {},
@@ -26,7 +30,7 @@ export default function UserProfile({ user }) {
         followerCount: user.followers.length,
       })
     }
-      getProfileInfoAndPhotos()
+    getProfileInfoAndPhotos()
   }, [user.username])
 
   return (
@@ -36,8 +40,12 @@ export default function UserProfile({ user }) {
         profile={profile}
         followerCount={followerCount}
         setFollowerCount={dispatch}
+        hasProfileImageChanged={hasProfileImageChanged}
+        setHasProfileImageChanged={setHasProfileImageChanged}
       />
-      <Photos photos={photosCollection} />
+      <Photos
+        photos={photosCollection}
+      />
     </>
   )
 }

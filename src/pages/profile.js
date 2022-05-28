@@ -9,6 +9,7 @@ export default function Profile() {
   const { username } = useParams()
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
+  const [hasProfileImageChanged, setHasProfileImageChanged] = useState(true)
 
   useEffect(() => {
     async function checkUserExits() {
@@ -24,9 +25,16 @@ export default function Profile() {
   }, [username, navigate])
   return user?.username ? (
     <div className='bg-gray-background'>
-      <Header />
+      <Header
+        hasProfileImageChanged={hasProfileImageChanged}
+        setHasProfileImageChanged={setHasProfileImageChanged}
+      />
       <div className='mx-auto max-w-screen-lg mt-20'>
-        <UserProfile user={user} />
+        <UserProfile
+          user={user}
+          hasProfileImageChanged={hasProfileImageChanged}
+          setHasProfileImageChanged={setHasProfileImageChanged}
+        />
       </div>
     </div>
   ) : null

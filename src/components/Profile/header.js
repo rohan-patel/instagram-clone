@@ -21,6 +21,8 @@ export default function Header({
   },
   followerCount,
   setFollowerCount,
+  hasProfileImageChanged,
+  setHasProfileImageChanged
 }) {
   const inputRef = useRef()
   const triggerFileSelectPopUp = () => inputRef.current.click()
@@ -105,7 +107,11 @@ export default function Header({
           //   alt={`${profileUsername} profile picture`}
           //   onClick={() => setIsSettingDP(true)}
           // />
-          <ProfilePicture profileUsername={profileUsername} />
+          <ProfilePicture
+            profileUsername={profileUsername}
+            hasProfileImageChanged={hasProfileImageChanged}
+            setHasProfileImageChanged={setHasProfileImageChanged}
+          />
         )}
       </div>
       <div className='flex items-center justify-center flex-col col-span-2'>
